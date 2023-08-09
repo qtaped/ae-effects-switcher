@@ -39,6 +39,9 @@
     var autoFillButton = buttonsGroupOne.add("button", undefined, "Autocomplete");
     var clearButton = buttonsGroupOne.add("button", undefined, "Clear");
 
+    // Exact terms
+    var exactCheckbox = containerOneGroup.add("checkbox", undefined, "Exact terms only");
+
     // Select All Comps
     var searchAllCompsCheckbox1 = containerOneGroup.add("checkbox", undefined, "Select All Compositions");
 
@@ -177,7 +180,7 @@
 
             globalCount++;
 
-            if (effect.name.toLowerCase().indexOf(effectName.toLowerCase()) !== -1) {
+            if ((exactCheckbox.value) ? (effect.name.toLowerCase() === effectName.toLowerCase()) : (effect.name.toLowerCase().indexOf(effectName.toLowerCase()) !== -1)) {
               totalCount++;
               effectCount++;
               if (effect.enabled) {
@@ -195,6 +198,7 @@
                 countToggled++;
               }
             }
+
           }
         }
       }
@@ -267,7 +271,7 @@ function listOfAllEffects() {
             }
         }
     }
-    
+
     // Sort the array of unique effect names alphabetically
     uniqueEffects.sort();
 
@@ -278,6 +282,7 @@ function listOfAllEffects() {
 
 // Function to check if an effect name is a duplicate
 function isEffectNameDuplicate(getEffectName) {
+
     for (var i = 0; i < uniqueEffects.length; i++) {
         if (uniqueEffects[i] === getEffectName) {
             return true;
@@ -293,11 +298,13 @@ function isEffectNameDuplicate(getEffectName) {
 
     searchEffectsButton.onClick = function () {
       var effectNames = effectNamesInput.text;
-      clearEffectTextLine("Effect name(s) containing:\n");
+      (exactCheckbox.value) ? (searchMsg = "Effect name(s):") : (searchMsg = "Effect name(s) containing:");
+      clearEffectTextLine(searchMsg + "\n");
       processEffects(effectNames, "search");
     };
 
     autoFillButton.onClick = function () {
+       exactCheckbox.value = true;
        listOfAllEffects();
        updateButtonState();
        clearEffectTextLine(uniqueEffects.length + " different effect(s) found.\n");
@@ -310,6 +317,7 @@ function isEffectNameDuplicate(getEffectName) {
        clearEffectTextLine(defaultMsg);
        updateButtonState();
        updateCompSelectedLine(compSelectedMessage);
+       exactCheckbox.value = false;
        buttonsGroupTwo.enabled = false;
     };
 
@@ -370,7 +378,7 @@ function isEffectNameDuplicate(getEffectName) {
     tab2.add("statictext", [32, 0, 296, 12], " ");
 
     var scriptName = "Effects Switcher";
-    var currentVersion = "0.7";
+    var currentVersion = "0.7.1";
     var url = "https://github.com/qtaped/ae-effects-switcher";
     var infosButton = tab2.add("button", undefined, scriptName + " " + currentVersion);
     infosButton.alignment = "right";
@@ -384,7 +392,6 @@ function isEffectNameDuplicate(getEffectName) {
     win.layout.layout(true);
 
     };
-
 
 
     /* Functions (tab 2) */
@@ -458,4 +465,5 @@ effectNamesInput.onChanging = function() {
   // Show the Panel
   buildUI(thisObj);
 })(this);
+
 
