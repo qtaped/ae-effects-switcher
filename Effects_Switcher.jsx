@@ -275,9 +275,7 @@ function listOfAllEffects() {
     // Sort the array of unique effect names alphabetically
     uniqueEffects.sort();
 
-    oneLineEffectsList = uniqueEffects.join(", ");
-    effectNamesInput.text = oneLineEffectsList;
-    effectMsgArray.push(oneLineEffectsList);
+    effectNamesInput.text = uniqueEffects.join(", ");
 }
 
 // Function to check if an effect name is a duplicate
@@ -378,7 +376,7 @@ function isEffectNameDuplicate(getEffectName) {
     tab2.add("statictext", [32, 0, 296, 12], " ");
 
     var scriptName = "Effects Switcher";
-    var currentVersion = "0.7.1";
+    var currentVersion = "0.7.2";
     var url = "https://github.com/qtaped/ae-effects-switcher";
     var infosButton = tab2.add("button", undefined, scriptName + " " + currentVersion);
     infosButton.alignment = "right";

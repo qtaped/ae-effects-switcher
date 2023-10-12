@@ -14,6 +14,6 @@ Download [Effects_Switcher.jsx](./Effects_Switcher.jsx) and run installation in 
 Files / Scripts / Install ScriptUI Panel...
 ```
 
-`Restart`After Effects.
+`Restart` After Effects.
 
-The script should be visible in `Window`tab.
+The script should be visible in `Window` tab.
