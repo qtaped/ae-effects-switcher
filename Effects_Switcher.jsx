@@ -173,32 +173,33 @@
         for (var j = 1; j <= layers.length; j++) {
           var layer = layers[j];
 
-          if (!(layer instanceof AVLayer)) continue;
+          if (layer instanceof AVLayer || layer instanceof TextLayer || layer instanceof ShapeLayer) {
 
-          for (var k = 1; k <= layer.effect.numProperties; k++) {
-            var effect = layer.effect(k);
+            for (var k = 1; k <= layer.effect.numProperties; k++) {
+              var effect = layer.effect(k);
 
-            globalCount++;
+              globalCount++;
 
-            if ((exactCheckbox.value) ? (effect.name.toLowerCase() === effectName.toLowerCase()) : (effect.name.toLowerCase().indexOf(effectName.toLowerCase()) !== -1)) {
-              totalCount++;
-              effectCount++;
-              if (effect.enabled) {
-                enabledCount++;
+              if ((exactCheckbox.value) ? (effect.name.toLowerCase() === effectName.toLowerCase()) : (effect.name.toLowerCase().indexOf(effectName.toLowerCase()) !== -1)) {
+                totalCount++;
+                effectCount++;
+                if (effect.enabled) {
+                  enabledCount++;
+                }
+
+                if (action === "toggled") {
+                  effect.enabled = !effect.enabled;
+                  countToggled++;
+                } else if (action === "enabled" && !effect.enabled) {
+                  effect.enabled = true;
+                  countToggled++;
+                } else if (action === "disabled" && effect.enabled) {
+                  effect.enabled = false;
+                  countToggled++;
+                }
               }
 
-              if (action === "toggled") {
-                effect.enabled = !effect.enabled;
-                countToggled++;
-              } else if (action === "enabled" && !effect.enabled) {
-                effect.enabled = true;
-                countToggled++;
-              } else if (action === "disabled" && effect.enabled) {
-                effect.enabled = false;
-                countToggled++;
-              }
             }
-
           }
         }
       }
@@ -261,13 +262,13 @@ function listOfAllEffects() {
 
         for (var j = 1; j <= comp.layers.length; j++) {
             var layer = comp.layers[j];
-
-            for (var k = 1; k <= layer.property("ADBE Effect Parade").numProperties; k++) {
-                var getEffectName = layer.property("ADBE Effect Parade").property(k).name;
-                
-                if (!isEffectNameDuplicate(getEffectName)) {
-                    uniqueEffects.push(getEffectName);
-                }
+            if (layer instanceof AVLayer || layer instanceof TextLayer || layer instanceof ShapeLayer) {
+              for (var k = 1; k <= layer.property("ADBE Effect Parade").numProperties; k++) {
+                  var getEffectName = layer.property("ADBE Effect Parade").property(k).name;
+                  if (!isEffectNameDuplicate(getEffectName)) {
+                      uniqueEffects.push(getEffectName);
+                  }
+              }
             }
         }
     }
@@ -418,7 +419,7 @@ function isEffectNameDuplicate(getEffectName) {
           }
           result += layerName + "\n";
 
-          if (layer instanceof AVLayer) {
+          if (layer instanceof AVLayer || layer instanceof TextLayer || layer instanceof ShapeLayer) {
             for (var k = 1; k <= layer.property("ADBE Effect Parade").numProperties; k++) {
               var effect = layer.property("ADBE Effect Parade").property(k);
               var effectName = "      Effect: " + effect.name;
@@ -457,6 +458,8 @@ effectNamesInput.onChanging = function() {
 };
 
 /* UI End */
+    win.center();
+    win.show();
     win.layout.layout(true);
   }
 
