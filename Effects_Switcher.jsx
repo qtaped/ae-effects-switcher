@@ -377,7 +377,7 @@ function isEffectNameDuplicate(getEffectName) {
     tab2.add("statictext", [32, 0, 296, 12], " ");
 
     var scriptName = "Effects Switcher";
-    var currentVersion = "0.7.2";
+    var currentVersion = "0.7.5";
     var url = "https://github.com/qtaped/ae-effects-switcher";
     var infosButton = tab2.add("button", undefined, scriptName + " " + currentVersion);
     infosButton.alignment = "right";
@@ -458,8 +458,10 @@ effectNamesInput.onChanging = function() {
 };
 
 /* UI End */
-    win.center();
-    win.show();
+    if (win != null && win instanceof Window) {
+      win.center();
+      win.show();
+    }
     win.layout.layout(true);
   }
 
